@@ -148,7 +148,7 @@ def _filter_raw_structure_file(
     )
     command = f"{configuration.p2rank} transform reduce-to-chains" + \
               f" -f {raw_file}" + \
-              f" --out_file {result} "
+              f" -out_file {result} "
     if configuration.chains:
         command += "-chains " + ",".join(configuration.chains)
     else:
@@ -164,8 +164,8 @@ def _prepare_fasta_files(
     os.makedirs(output, exist_ok=True)
     configuration.execute_command(
         f"{configuration.p2rank} analyze fasta-masked"
-        f" --f {structure_file}"
-        f" --o {output}"
+        f" -f {structure_file}"
+        f" -o {output}"
     )
     return {
         # The fifth one is the code, for example: 2W83_A.fasta
@@ -269,7 +269,7 @@ def _execute_p2rank(
         f"-threads 1 "
         f"-f {input_structure} "
         f"-o {output_directory} "
-        f"--log_to_console 1"
+        f"-log_to_console 1"
     )
     configuration.execute_command(command)
 
