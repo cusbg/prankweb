@@ -84,7 +84,7 @@ RUN sed -i 's/^        parser = MMCIFParser(filename, modelsAs=modelsAs)$/      
 
 # Install dodo (docking in docker)
 # https://github.com/kiarka7/DODO
-RUN wget -q https://raw.githubusercontent.com/kiarka7/DODO/e297f7209c50fa564a25e306085a92f079f1e5ad/run_docking.py -O /opt/executor-docking/run_docking.py
+RUN wget -q https://raw.githubusercontent.com/kiarka7/DODO/5de5fa13b262dafe7e3e49160994a1b1b5f31bfd/run_docking.py -O /opt/executor-docking/run_docking.py
 
 COPY --chown=user:user ./executor-docking/requirements.txt ./
 RUN pip3 install -r requirements.txt

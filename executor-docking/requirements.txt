@@ -2,3 +2,4 @@ requests==2.31.0
 eventlet==0.33.3
 celery==5.3.4
 biopython==1.82
+rdkit==2024.9.6
