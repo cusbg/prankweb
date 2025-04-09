@@ -2,7 +2,7 @@
 # executor-docking
 #
 
-FROM ubuntu:24.04
+FROM ubuntu:24.10
 
 ARG UID=5988
 ARG GID=5988
@@ -33,7 +33,10 @@ RUN apt-get update && \
     libexpat1-dev \
     liblzma-dev \
     tk-dev \
-    libffi-dev
+    libffi-dev \ 
+    python3-biopython \
+    python3-rdkit \
+    rdkit-data
 
 # https://github.com/python/cpython/issues/102134
 ENV VIRTUAL_ENV=/opt/venv
@@ -63,11 +66,9 @@ RUN curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py && \
 
 RUN python2.7 -m pip install numpy
 
-RUN wget -q https://vina.scripps.edu/wp-content/uploads/sites/55/2020/12/autodock_vina_1_1_2_linux_x86.tgz && \
-    tar -xzvf autodock_vina_1_1_2_linux_x86.tgz && \
-    rm autodock_vina_1_1_2_linux_x86.tgz && \
-    mv autodock_vina_1_1_2_linux_x86 /opt/vina && \
-    ln -s /opt/vina/bin/vina /usr/local/bin/vina
+RUN wget -q https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.5/vina_1.2.5_linux_x86_64 -O /opt/vina_1.2.5_linux_x86_64 && \
+    chmod +x /opt/vina_1.2.5_linux_x86_64 && \
+    ln -sf /opt/vina_1.2.5_linux_x86_64 /usr/local/bin/vina
 
 RUN curl -L -o mgltools_x86_64Linux2_1.5.7p1.tar.gz https://ccsb.scripps.edu/mgltools/download/491/ && \
     tar -xzf mgltools_x86_64Linux2_1.5.7p1.tar.gz && \
