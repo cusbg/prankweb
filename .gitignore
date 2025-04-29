@@ -1,6 +1,7 @@
 #
 .*
 !.dockerignore
+!.github/*
 
 # Selected file.
 *.iml
