@@ -17,7 +17,7 @@ dependencies {
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.0'
     implementation group: 'commons-cli', name: 'commons-cli', version: '1.5.0'
     implementation group: 'org.apache.commons', name: 'commons-csv', version: '1.9.0'
-    implementation(group: 'org.biojava', name: 'biojava-structure', version: '6.0.1') {
+    implementation(group: 'org.biojava', name: 'biojava-structure', version: '7.2.2') {
         exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl'
     }
     implementation group: 'javax.activation', name: 'activation', version: '1.1.1'
