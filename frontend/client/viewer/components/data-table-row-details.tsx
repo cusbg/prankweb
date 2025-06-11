@@ -39,6 +39,10 @@ export default function DataTableRowDetails(props: { pocket: PocketData; setTab:
             name: "Number of residues",
             value: pocket.residues.length
         },
+        {
+            name: "Center",
+            value: `(${pocket.center[0]}, ${pocket.center[1]}, ${pocket.center[2]})`
+        },
     ];
 
     if (pocket.avgAlphaFold) shownProperties.push({
