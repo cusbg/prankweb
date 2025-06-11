@@ -4,6 +4,7 @@ export interface DockingTaskProps {
     id: string;
     hash: string;
     structureName: string;
+    dockingConfigurationURL: string;
 }
 
 export type Hetatm = {

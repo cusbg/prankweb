@@ -65,13 +65,28 @@ function Row(props: { row: Model; models: number[]; handleClick: (models: number
 }
 
 export function DockingTaskRightPanel({ pdbqtModels, dp, plugin, ligandRepresentations }: { pdbqtModels: Model[], dp: DockingTaskProps, plugin: PluginUIContext, ligandRepresentations: StateObjectSelector[]; }) {
-    const handleDownload = () => {
+    const handleResultDownload = () => {
         const element = document.createElement("a");
         const file = new Blob([dp.ligandPDBQT], { type: 'text/plain' });
         element.href = URL.createObjectURL(file);
         element.download = `result-${new Date().toISOString()}.pdbqt`;
         document.body.appendChild(element); // Required for this to work in Firefox
         element.click();
+    };
+
+    const handleConfigurationDownload = async () => {
+        await fetch(dp.dockingConfigurationURL)
+            .then(response => response.text())
+            .then(content => {
+                const element = document.createElement("a");
+                const file = new Blob([content], { type: 'text/plain' });
+                element.href = URL.createObjectURL(file);
+                element.download = `docking-configuration-${new Date().toISOString()}.json`;
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
+            })
+            .catch(error => console.error("Error downloading docking configuration:", error));
     };
 
     const [models, setModels] = React.useState<number[]>([1]);
@@ -148,7 +163,9 @@ export function DockingTaskRightPanel({ pdbqtModels, dp, plugin, ligandRepresent
                     </TableBody>
                 </Table>
             </TableContainer>
-            <Button style={{ marginTop: "1em" }} variant="contained" onClick={handleDownload}>Download results</Button>
+            <Button style={{ marginTop: "1em" }} variant="contained" onClick={handleConfigurationDownload}>Download docking configuration</Button>
+            &nbsp;
+            <Button style={{ marginTop: "1em" }} variant="contained" onClick={handleResultDownload}>Download results</Button>
         </>
     );
 }

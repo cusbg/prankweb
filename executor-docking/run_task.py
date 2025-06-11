@@ -194,6 +194,9 @@ def execute_directory_task(docking_directory: str, taskId: int):
             stream.write(result_json)
         finally:
             stream.flush()
+
+    # copy the docking parameters file to the public directory
+    shutil.copy(os.path.join(docking_directory, str(taskId), "docking_parameters.json"), os.path.join(docking_directory, str(taskId), "public", "docking_parameters.json"))
     
     # update the status file, reload it first to make sure we don't overwrite any changes
     status = _load_json(status_file)
