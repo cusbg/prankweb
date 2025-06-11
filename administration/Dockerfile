@@ -2,7 +2,7 @@
 # java-tools
 #
 
-FROM debian:bookworm-20231009 as java-tools
+FROM debian:bookworm-20231009 AS java-tools
 
 RUN apt-get update \
   && apt-get -y --no-install-recommends install openjdk-17-jdk
