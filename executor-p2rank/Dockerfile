@@ -2,7 +2,7 @@
 # java-tools
 #
 
-FROM debian:bookworm-20231009 as java-tools
+FROM debian:bookworm-20231009 AS java-tools
 
 RUN apt-get update \
   && apt-get -y --no-install-recommends install openjdk-17-jdk
@@ -21,7 +21,7 @@ RUN chmod +x ./gradlew && ./gradlew installDist \
 # * /opt/alignment-based-conservation-dependencies
 #
 
-FROM debian:bookworm-20231009 as alignment-based-conservation
+FROM debian:bookworm-20231009 AS alignment-based-conservation
 
 RUN apt-get update \
   && apt-get -y --no-install-recommends install \
@@ -67,7 +67,7 @@ RUN chmod a+x /opt/alignment-based-conservation/conservation_alignment_based.py 
 # * /opt/hmm-based-conservation-dependencies
 #
 
-FROM debian:bookworm-20231009 as hmm-based-conservation
+FROM debian:bookworm-20231009 AS hmm-based-conservation
 
 RUN apt-get update \
   && apt-get -y --no-install-recommends install \
