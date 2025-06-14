@@ -40,8 +40,12 @@ export default function DataTableRowDetails(props: { pocket: PocketData; setTab:
             value: pocket.residues.length
         },
         {
-            name: "Center",
+            name: "Pocket center",
             value: `(${pocket.center[0]}, ${pocket.center[1]}, ${pocket.center[2]})`
+        },
+        {
+            name: "Residues",
+            value: pocket.residues.join(", ")
         },
     ];
 
