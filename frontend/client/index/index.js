@@ -452,11 +452,11 @@ class Submit {
     if (conservation) {
       url = this.createUrl(
         "v4-conservation-hmm",
-        code, sealed ? [] : chains);
+        code, sealed ? [] : chains.selected);
     } else {
       url = this.createUrl(
         "v4",
-        code, sealed ? [] : chains);
+        code, sealed ? [] : chains.selected);
     }
     window.location.href = url;
   }
