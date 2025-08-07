@@ -145,7 +145,7 @@ function renderFailedTask(database: string, id: string) {
     UserInterface.progressStdout
   ]);
   setProgressMessage("Task failed, see the log below for more details.<br/>");
-  if (!database.includes("user")) setProgressMessage("Task failed, see the log below for more details.<br/><strong>To re-run the prediction, please refresh the page.</strong>");
+  if (!database.includes("user")) setProgressMessage("Task failed, see the log below for more details.<br/><strong>To re-run the prediction, please try again in 1 hour.</strong>");
   setStdout(database, id);
 }
 

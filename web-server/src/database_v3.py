@@ -63,7 +63,7 @@ class DatabaseV3(NestedReadOnlyDatabase):
             # In such cases, we want to remove the prediction and run it again.
             with open(os.path.join(directory, "info.json"), "r") as f:
                 info = json.load(f)
-                if info["status"] == "failed":
+                if _should_rerun_prediction(info):
                     # Remove the directory and create a new prediction.
                     shutil.rmtree(directory)
                 else:
@@ -103,7 +103,7 @@ class DatabaseV3ConservationHmm(NestedReadOnlyDatabase):
             # In such cases, we want to remove the prediction and run it again.
             with open(os.path.join(directory, "info.json"), "r") as f:
                 info = json.load(f)
-                if info["status"] == "failed":
+                if _should_rerun_prediction(info):
                     # Remove the directory and create a new prediction.
                     shutil.rmtree(directory)
                 else:
@@ -185,7 +185,7 @@ class DatabaseV3AlphaFold(NestedReadOnlyDatabase):
             # In such cases, we want to remove the prediction and run it again.
             with open(os.path.join(directory, "info.json"), "r") as f:
                 info = json.load(f)
-                if info["status"] == "failed":
+                if _should_rerun_prediction(info):
                     # Remove the directory and create a new prediction.
                     shutil.rmtree(directory)
                 else:
@@ -229,7 +229,7 @@ class DatabaseV3AlphaFoldConservationHmm(NestedReadOnlyDatabase):
             # In such cases, we want to remove the prediction and run it again.
             with open(os.path.join(directory, "info.json"), "r") as f:
                 info = json.load(f)
-                if info["status"] == "failed":
+                if _should_rerun_prediction(info):
                     # Remove the directory and create a new prediction.
                     shutil.rmtree(directory)
                 else:
@@ -355,6 +355,22 @@ def _configuration_to_prediction(
         conservation="hmm" if conservation else "none",
         metadata={},
     )
+
+def _should_rerun_prediction(info: dict) -> bool:
+    last_change_str = info.get("lastChange")
+    last_change = None
+
+    if last_change_str:
+        try:
+            last_change = datetime.datetime.strptime(last_change_str, "%Y-%m-%dT%H:%M:%S")
+        except Exception:
+            last_change = None
+
+    now = datetime.datetime.now()
+    if info["status"] == "failed" and last_change and (now - last_change).total_seconds() >= 3600:
+        return True
+
+    return False
 
 
 def _is_prediction_valid(prediction: Prediction) -> bool:
