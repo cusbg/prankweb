@@ -100,7 +100,7 @@ FROM debian:bookworm-20231009
 
 ARG UID=5988
 ARG GID=5988
-ARG P2RANK_URL=https://github.com/rdk/p2rank/releases/download/2.5/p2rank_2.5.tar.gz
+ARG P2RANK_URL=https://github.com/rdk/p2rank/releases/download/2.5.1/p2rank_2.5.1.tar.gz
 ARG CELERY_BROKER_URL="amqp://user-develop:develop@localhost:5672"
 
 RUN apt-get update \
