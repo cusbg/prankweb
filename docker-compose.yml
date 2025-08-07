@@ -27,13 +27,13 @@ services:
       timeout: 30s
       retries: 3
   flower:
-    build: https://github.com/mher/flower.git
+    image: mher/flower
     command: "celery flower --url_prefix=service/flower"
     environment:
       CELERY_BROKER_URL: "amqp://${RABBITMQ_DEFAULT_USER:-user}:${RABBITMQ_DEFAULT_PASS:-1234}@rabbitmq:5672"
     depends_on:
       rabbitmq:
-          condition: service_healthy
+        condition: service_healthy
   web-server:
     build:
       context: ./
