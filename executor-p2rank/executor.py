@@ -132,8 +132,8 @@ def _download_from_alpha_fold(
     metadata["alpha-fold"] = entry_content
     if len(entry_content) == 0:
         raise Exception(f"No Alphafold entry found for: {code}")
-    assert len(entry_content) == 1, \
-        f"One entry expected for AlphaFold, found {len(entry_content)}"
+    if len(entry_content) != 1:
+        logger.warning(f"One entry expected for AlphaFold, found {len(entry_content)}! Using the first entry.")
     cif_url = entry_content[0]["cifUrl"]
     _download(cif_url, destination)
 
