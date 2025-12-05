@@ -12,7 +12,7 @@ export default function PredictionInfoTab(props: { predictionInfo: PredictionInf
     let url = "";
 
     if (isPredicted) {
-        url = `https://alphafold.ebi.ac.uk/entry/${pInfo.metadata.predictionName}`;
+        url = `https://alphafold.ebi.ac.uk/entry/AF-${pInfo.metadata.predictionName}-F1`;
     }
     else if (!isUserProvided) { //this means that the structure is experimental
         url = `https://www.rcsb.org/structure/${pInfo.metadata.predictionName}`;
