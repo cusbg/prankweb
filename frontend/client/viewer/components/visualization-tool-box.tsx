@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, FormHelperText, InputLabel, MenuItem, Select } from "@mui/material";
+import { Box, Button, FormControl, FormHelperText, InputLabel, MenuItem, Select, CircularProgress } from "@mui/material";
 import React from "react";
 
 import "./visualization-tool-box.css";
@@ -16,14 +16,15 @@ export class VisualizationToolBox extends React.Component<{
     polymerColor: PolymerColorType,
     onPolymerViewChange: (polymerView: PolymerViewType) => void,
     onPocketsViewChange: (pocketsView: PocketsViewType) => void,
-    onPolymerColorChange: (polymerColor: PolymerColorType) => void,
+    onPolymerColorChange: (polymerColor: PolymerColorType) => Promise<void>,
     onShowConfidentChange: () => void,
 }, {
     polymerView: PolymerViewType,
     pocketsView: PocketsViewType,
     polymerColor: PolymerColorType,
     is1DViewerVisible: boolean,
-    isShowOnlyPredicted: boolean;
+    isShowOnlyPredicted: boolean,
+    isColoringPolymer: boolean;
 }> {
 
     constructor(props: any) {
@@ -42,7 +43,8 @@ export class VisualizationToolBox extends React.Component<{
             pocketsView: this.props.pocketsView,
             polymerColor: this.props.polymerColor,
             is1DViewerVisible: true,
-            isShowOnlyPredicted: false
+            isShowOnlyPredicted: false,
+            isColoringPolymer: false
         };
     }
 
@@ -81,9 +83,13 @@ export class VisualizationToolBox extends React.Component<{
         this.props.onPocketsViewChange(pocketsView);
     }
 
-    changePolymerColor(polymerColor: PolymerColorType) {
-        this.setState({ polymerColor: polymerColor });
-        this.props.onPolymerColorChange(polymerColor);
+    async changePolymerColor(polymerColor: PolymerColorType) {
+        this.setState({ polymerColor: polymerColor, isColoringPolymer: true }, async () => {
+            // Wait for next frame to ensure UI updates
+            await new Promise(resolve => setTimeout(resolve, 0));
+            await this.props.onPolymerColorChange(polymerColor);
+            this.setState({ isColoringPolymer: false });
+        });
     }
 
     changeShowConfident() {
@@ -138,7 +144,7 @@ export class VisualizationToolBox extends React.Component<{
                         </div>
                     </div>
 
-                    <div className="visualization-toolbox-option">
+                    <div className="visualization-toolbox-option visualization-toolbox-option-relative">
                         <div className="visualization-toolbox-option-description">
                             <FormControl size="small" className="visualization-toolbox-formcontrol">
                                 <Select
@@ -147,6 +153,7 @@ export class VisualizationToolBox extends React.Component<{
                                     value={this.state.polymerColor}
                                     onChange={(event) => this.changePolymerColor(event.target.value as PolymerColorType)}
                                     className="visualization-toolbox-select"
+                                    disabled={this.state.isColoringPolymer}
                                 >
                                     <MenuItem value={PolymerColorType.White}>White</MenuItem>
                                     {this.scoresDataAvailable(this.props.predictionData.structure.scores.conservation) &&
@@ -156,6 +163,11 @@ export class VisualizationToolBox extends React.Component<{
                                 </Select>
                                 <FormHelperText sx={{ textAlign: "center" }}>Polymer coloring</FormHelperText>
                             </FormControl>
+                            {this.state.isColoringPolymer && (
+                                <div className="visualization-toolbox-loading-overlay">
+                                    <CircularProgress size={24} />
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

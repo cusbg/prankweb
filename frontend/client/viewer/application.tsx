@@ -178,9 +178,9 @@ export class Application extends React.Component<ReactApplicationProps, ReactApp
         });
     }
 
-    onPolymerColorChange(value: PolymerColorType) {
+    async onPolymerColorChange(value: PolymerColorType) {
         this.setState({ "polymerColor": value });
-        overPaintPolymer(value, this.props.molstarPlugin, this.state.data, this.state.polymerRepresentations, this.state.predictedPolymerRepresentations, this.state.pocketRepresentations);
+        await overPaintPolymer(value, this.props.molstarPlugin, this.state.data, this.state.polymerRepresentations, this.state.predictedPolymerRepresentations, this.state.pocketRepresentations);
     }
 
     onShowConfidentChange() {
