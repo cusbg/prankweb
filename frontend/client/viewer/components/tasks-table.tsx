@@ -220,7 +220,32 @@ export function TasksTable(props: { pocket: PocketData | null, predictionInfo: P
         setOpenConfirmDialogServerTasks(true);
     };
 
+    const handleFailedTaskClick = async (task: ServerTaskLocalStorageData) => {
+        if (task.type === ServerTaskType.Docking) {
+            const hash = await dockingHash(task.pocket.toString(), task.params[0], task.params[1]);
+            const logUrl = `./api/v2/docking/${props.predictionInfo.database}/${props.predictionInfo.id}/${hash}/log`;
+            window.open(logUrl, "_blank");
+        } else if (task.type === ServerTaskType.Tunnels) {
+            const hash = await tunnelsHash(task.pocket.toString());
+            const logUrl = `./api/v2/tunnels/${props.predictionInfo.database}/${props.predictionInfo.id}/${hash}/log`;
+            window.open(logUrl, "_blank");
+        }
+    };
+
     const isUrl = (url: any) => { return typeof url === 'string' && (url.startsWith("http://") || url.startsWith("https://")); };
+
+    const renderTaskStatus = (task: ServerTaskLocalStorageData) => {
+        const linkStyle = { textDecoration: "underline", cursor: "pointer" };
+        
+        switch (task.status) {
+            case "successful":
+                return <span onClick={() => handleResultClick(task)} style={{ color: "blue", ...linkStyle }}>successful</span>;
+            case "failed":
+                return <span onClick={() => handleFailedTaskClick(task)} style={{ color: "red", ...linkStyle }}>failed (view log)</span>;
+            default:
+                return task.status;
+        }
+    };
 
     return (
         <>
@@ -261,7 +286,7 @@ export function TasksTable(props: { pocket: PocketData | null, predictionInfo: P
                                     <TableCell>{ServerTaskTypeDescriptors[task.type]}</TableCell>
                                     <TableCell>{task.name}</TableCell>
                                     <TableCell>{makeDateMoreReadable(task.created)}</TableCell>
-                                    <TableCell>{task.status === "successful" ? <span onClick={() => handleResultClick(task)} style={{ color: "blue", textDecoration: "underline", cursor: "pointer" }}>successful</span> : task.status}</TableCell>
+                                    <TableCell>{renderTaskStatus(task)}</TableCell>
                                     <TableCell>
                                         <button type="button" className="btn btn-outline-secondary btnIcon" title="Delete task" style={{ "padding": "0.25rem" }} onClick={() => handleServerTaskDeleteRequest(task)}>
                                             <i className="bi bi-trash" style={{ "display": "block", "fontSize": "small" }}></i>

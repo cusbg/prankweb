@@ -101,6 +101,15 @@ def route_get_all_docking_tasks(database_name: str, prediction_name: str):
     dt = DockingTask(database_name=database_name)
     return dt.get_all_tasks(prediction_name.upper())
 
+@api_v2.route(
+    "/docking/<database_name>/<prediction_name>/<task_hash>/log",
+    methods=["GET"]
+)
+def route_get_docking_log(database_name: str, prediction_name: str, task_hash: str):
+    """Get the log file for a specific docking task."""
+    dt = DockingTask(database_name=database_name)
+    return dt.get_log(prediction_name.upper(), task_hash)
+
 # tunnels routes
 
 @api_v2.route(
@@ -120,6 +129,15 @@ def route_get_all_tunnels_tasks(database_name: str, prediction_name: str):
     """Get all tunnels tasks from the server."""
     tt = TunnelsTask(database_name=database_name)
     return tt.get_all_tasks(prediction_name.upper())
+
+@api_v2.route(
+    "/tunnels/<database_name>/<prediction_name>/<task_hash>/log",
+    methods=["GET"]
+)
+def route_get_tunnels_log(database_name: str, prediction_name: str, task_hash: str):
+    """Get the log file for a specific tunnels task."""
+    tt = TunnelsTask(database_name=database_name)
+    return tt.get_log(prediction_name.upper(), task_hash)
 
 @api_v2.route(
     "/tunnels/<database_name>/<prediction_name>/post",

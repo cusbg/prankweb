@@ -159,6 +159,43 @@ class TunnelsTask:
         
         return "", 404
     
+    def get_log(self, prediction_id: str, data_hash: str):
+        """
+        Gets the log file for a task with a given identifier and hash.
+        """
+        directory = self._get_directory(prediction_id)
+        if directory is None or not os.path.isdir(directory):
+            return "", 404
+    
+        try:
+            # Find the task id in the info file
+            with open(_info_file_str(directory), "r") as f:
+                found = False
+                fileData = json.load(f)
+                for task in fileData["tasks"]:
+                    if task["initialData"]["hash"] == data_hash:
+                        directory = os.path.join(directory, str(task["id"]))
+                        found = True
+                        break
+                if not found:
+                    return "", 404
+        except OSError:
+            return "", 500
+
+        # check if log file exists in public directory (for failed tasks) or in task directory
+        # public/log - copied there when tasks fail
+        log_file_public = os.path.join(directory, "public", "log")
+        # fallback location: log - for backward compatibility with old failed tasks,
+        # edge cases where copy failed, or future access to logs of running/successful tasks
+        log_file_private = os.path.join(directory, "log")
+
+        if os.path.isfile(log_file_public):
+            return self._response_file(os.path.join(directory, "public"), "log", mimetype="text/plain")
+        elif os.path.isfile(log_file_private):
+            return self._response_file(directory, "log", mimetype="text/plain")
+
+        return "", 404
+
     def _get_directory(self, prediction_id: str) -> typing.Optional[str]:
         """
         Returns a directory for a task with given prediction ID.

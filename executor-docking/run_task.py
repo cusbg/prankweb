@@ -146,6 +146,10 @@ def execute_directory_task(docking_directory: str, taskId: int):
         logger.log(f"Task {taskId} failed, no structure file found")
         logger.close()
 
+        # copy log file to public directory so it can be accessed via API
+        os.makedirs(os.path.join(docking_directory, str(taskId), "public"), exist_ok=True)
+        shutil.copy(log_filename, os.path.join(docking_directory, str(taskId), "public", "log"))
+
         # update the status file, reload it first to make sure we don't overwrite any changes
         status = _load_json(status_file)
         status["tasks"][taskId]["status"] = Status.FAILED.value
@@ -163,6 +167,10 @@ def execute_directory_task(docking_directory: str, taskId: int):
         # something went wrong during the docking
         logger.log(f"Task {taskId} failed, {str(e)}, {repr(e)}")
         logger.close()
+
+        # copy log file to public directory so it can be accessed via API
+        os.makedirs(os.path.join(docking_directory, str(taskId), "public"), exist_ok=True)
+        shutil.copy(log_filename, os.path.join(docking_directory, str(taskId), "public", "log"))
 
         # update the status file, reload it first to make sure we don't overwrite any changes
         status = _load_json(status_file)
