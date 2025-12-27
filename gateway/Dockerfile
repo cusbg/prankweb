@@ -1,7 +1,7 @@
 #
 # Build web-application.
 #
-FROM node:19.7-bullseye AS frontend
+FROM node:24-bullseye AS frontend
 
 WORKDIR /opt/frontend
 

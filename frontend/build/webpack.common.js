@@ -25,9 +25,16 @@ module.exports = {
   },
   "resolve": {
     "extensions": [".js", ".jsx", ".ts", ".tsx"],
+    "fullySpecified": false,
   },
   "module": {
     "rules": [
+      {
+        "test": /\.m?js$/,
+        "resolve": {
+          "fullySpecified": false,
+        },
+      },
       {
         "test": /\.[jt]sx?$/,
         "loader": "esbuild-loader",

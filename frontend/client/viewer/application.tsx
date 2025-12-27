@@ -207,7 +207,7 @@ export class Application extends React.Component<ReactApplicationProps, ReactApp
         //resolve RCSB at first - do it by recoloring the pocket to the default color value
         //currently there is no other way to "remove" one of the pockets without modyfing the others
         const newColor = isVisible ? "#" + this.state.data.pockets[index].color : "#F9F9F9";
-        const track = this.state.pluginRcsb.getBoardData().find(e => e.trackId.indexOf("pocketsTrack") !== -1);
+        const track = this.state.pluginRcsb.getBoardData().find((e: any) => e.trackId.indexOf("pocketsTrack") !== -1);
         if (track) {
             // this shouldn't be any but I couldn't find a way to avoid it
             track.trackData!.filter((e: any) => e.provenanceName === `pocket${index + 1}`).forEach((foundPocket: RcsbFvTrackDataElementInterface) => (foundPocket.color = newColor));

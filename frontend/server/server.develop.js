@@ -58,7 +58,7 @@ function initializeWebpack(app) {
   // We add some extra file mapping as the URL can be
   // {domain}/id/2src_2 and we need to return the gith files for
   // {domain}/id/2src_2/bundle.js, etc ...
-  app.get("/*", (req, res) => {
+  app.use((req, res) => {
     const url = req.originalUrl.substr(1);
     if (url.startsWith("analyze")) {
       if (url.includes("analyze.js")) {
