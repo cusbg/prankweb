@@ -169,7 +169,7 @@ class DockingTask:
                         break
                 if not found:
                     return "", 404
-        except OSError:
+        except (OSError, json.JSONDecodeError, KeyError):
             return "", 500
 
         # check if log file exists in public directory (for failed tasks) or in task directory

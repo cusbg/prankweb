@@ -85,10 +85,15 @@ export class VisualizationToolBox extends React.Component<{
 
     async changePolymerColor(polymerColor: PolymerColorType) {
         this.setState({ polymerColor: polymerColor, isColoringPolymer: true }, async () => {
-            // Wait for next frame to ensure UI updates
-            await new Promise(resolve => setTimeout(resolve, 0));
-            await this.props.onPolymerColorChange(polymerColor);
-            this.setState({ isColoringPolymer: false });
+            try {
+                // Wait for next frame to ensure UI updates
+                await new Promise(resolve => setTimeout(resolve, 0));
+                await this.props.onPolymerColorChange(polymerColor);
+            } catch (error) {
+                console.error("Error changing polymer color:", error);
+            } finally {
+                this.setState({ isColoringPolymer: false });
+            }
         });
     }
 
