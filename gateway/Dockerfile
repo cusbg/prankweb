@@ -37,7 +37,7 @@ COPY --from=htpasswd /opt/htpasswd/.htpasswd /etc/apache2/.htpasswd
 COPY ./gateway/nginx/cors.conf /etc/nginx/
 COPY ./gateway/nginx/restricted.conf /etc/nginx/
 
-COPY ./gateway/nginx/conf.d/ /etc/nginx/conf.d/
+COPY ./gateway/conf.d/ /etc/nginx/conf.d/
 COPY ./gateway/docker-entrypoint.d/ /docker-entrypoint.d/
 
 RUN chmod +x /docker-entrypoint.d/20-google-analytics.sh
