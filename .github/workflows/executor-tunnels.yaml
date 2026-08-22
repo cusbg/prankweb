@@ -1,4 +1,4 @@
-name: Publish executor-p2rank
+name: Publish executor-tunnels
 
 on:
   push:
@@ -23,7 +23,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v6
         with:
-          images: ghcr.io/cusbg/executor-p2rank
+          images: ghcr.io/cusbg/executor-tunnels
           tags: |
             # On main branch push use date with sha.
             type=raw,value={{date 'YYYY-MM-DD'}}-{{sha}},enable=${{ github.ref_name == 'main' }}
@@ -41,7 +41,7 @@ jobs:
         uses: docker/build-push-action@v7
         with:
           context: ./
-          file: ./executor-p2rank/Dockerfile
+          file: ./executor-tunnels/Dockerfile
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
