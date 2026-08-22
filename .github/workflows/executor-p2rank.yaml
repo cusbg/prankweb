@@ -5,6 +5,12 @@ on:
     branches:
       - "main"
       - "develop"
+    paths:
+      - ".github/workflows/executor-p2rank.yaml"
+      - "executor-p2rank/**"
+      - "java-tools/**"
+      - "conservation/**"
+      - "administration/**"
 
 jobs:
   build-and-push:

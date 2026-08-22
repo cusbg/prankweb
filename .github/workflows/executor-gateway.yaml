@@ -5,6 +5,10 @@ on:
     branches:
       - "main"
       - "develop"
+    paths:
+      - ".github/workflows/executor-gateway.yaml"
+      - "gateway/**"
+      - "frontend/**"
 
 jobs:
   build-and-push:
