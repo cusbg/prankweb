@@ -72,6 +72,21 @@ services:
       - predictions:/data/prankweb/predictions
       - docking:/data/prankweb/docking
       - tunnels:/data/prankweb/tunnels
+  conservation-server:
+    # TODO: Mount the conservation volume so the HMM database is available.
+    # Use `docker compose run` with `-v` as described in conservation/README.md
+    # for now. To make `docker compose up` work, add:
+    #   volumes:
+    #     - conservation:/data/conservation
+    build:
+      context: ./
+      dockerfile: ./executor-p2rank/Dockerfile
+      args:
+        UID: ${UID:-5988}
+        GID: ${GID:-5988}
+    command: ["uvicorn", "conservation.conservation_server.main:app", "--host", "0.0.0.0", "--port", "8030"]
+    ports:
+      - "8030:8030"
   executor-docking:
     build:
       context: ./

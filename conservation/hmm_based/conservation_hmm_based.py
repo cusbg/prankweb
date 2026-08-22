@@ -68,6 +68,17 @@ def compute_conservation(
         mask_output: bool,
         max_seqs: int,
 ):
+    if database_file is None:
+        raise RuntimeError(
+            "HMM sequence database file is not set."
+            " Set HMM_SEQUENCE_FILE environment variable.")
+    if not os.path.isfile(database_file):
+        raise RuntimeError(
+            f"HMM sequence database file not found: {database_file}")
+    if not os.access(database_file, os.R_OK):
+        raise RuntimeError(
+            f"HMM sequence database file is not readable: {database_file}")
+
     unweighted_msa_file = _generate_msa(
         fasta_file, database_file, working_directory, execute_command)
 

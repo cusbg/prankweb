@@ -192,6 +192,9 @@ RUN chmod a+x ./p2rank.sh \
   && chmod a+x ./run_p2rank.py \
   && chmod a+x ./run_p2rank_task.py
 
+COPY --chown=user:user ./executor-p2rank/conservation/conservation_server/requirements.txt ./conservation/conservation_server/
+RUN pip3 install -r ./conservation/conservation_server/requirements.txt
+
 #
 # administration tools
 WORKDIR /opt/administration

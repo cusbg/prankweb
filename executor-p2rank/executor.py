@@ -210,6 +210,9 @@ def _prepare_conservation(
                 configuration)
             cache[fasta] = output_file
         result[chain] = output_file
+
+    logger.info("Structure: " + str(structure))
+    logger.info("Structure file: " + configuration.structure_file)
     return result
 
 

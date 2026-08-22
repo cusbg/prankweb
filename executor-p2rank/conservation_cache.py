@@ -15,6 +15,7 @@ def create_hom_from_cache(
         fasta_file: str, output_file: str) -> bool:
     if cache_directory is None:
         return False
+    logging.info("Fasta file: " + fasta_file)
     sequences = _load_fasta_file(fasta_file)
     if len(sequences) != 1:
         logging.warning(
@@ -24,7 +25,7 @@ def create_hom_from_cache(
     conservation = load_from_cache(cache_directory, sequence)
     if conservation is None:
         return False
-    logging.info("Using conservation from cache.")
+    logging.info("Using conservation from cache. Writing to file: " + output_file)
     _write_hom_file(output_file, conservation)
     return True
 
