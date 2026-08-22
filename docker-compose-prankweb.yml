@@ -4,9 +4,10 @@ services:
       context: ./
       dockerfile: ./gateway/Dockerfile
       args:
-        GOOGLE_ANALYTICS: ${FRONTEND_GOOGLE_ANALYTICS}
         WEB_SERVICE_USER: ${WEB_SERVICE_USER}
         WEB_SERVICE_PASSWORD: ${WEB_SERVICE_PASSWORD}
+    environment:
+      GOOGLE_ANALYTICS: ${FRONTEND_GOOGLE_ANALYTICS}
     depends_on:
       - web-server
     restart: unless-stopped
@@ -116,16 +117,6 @@ services:
       dockerfile: ./monitor/Dockerfile
     environment:
       GOOGLE_ANALYTICS: ${MONITOR_GOOGLE_ANALYTICS}
-    restart: unless-stopped
-  prometheus:
-    build:
-      context: ./
-      dockerfile: ./prometheus/Dockerfile
-    volumes:
-      - services:/data
-    depends_on:
-      - flower
-      - rabbitmq
     restart: unless-stopped
 volumes:
   rabbitmq:

@@ -127,11 +127,10 @@ module.exports = {
 };
 
 function generateGoogleAnalytics() {
-  const ga = process.env.GOOGLE_ANALYTICS;
-  if (devMode || ga === undefined || ga === "") {
+  if (devMode) {
     return "''";
   }
 
-  // we return only the GA env variable, the rest is handled in the template file
-  return `'${ga}'`;
+  // Placeholder substituted at container startup, see gateway/nginx/20-google-analytics.sh
+  return "'__GOOGLE_ANALYTICS_ID__'";
 }

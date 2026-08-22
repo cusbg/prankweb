@@ -4,9 +4,10 @@ services:
       context: ./
       dockerfile: ./gateway/Dockerfile
       args:
-        GOOGLE_ANALYTICS: ""
         WEB_SERVICE_USER: ${WEB_SERVICE_USER:-user}
         WEB_SERVICE_PASSWORD: ${WEB_SERVICE_PASSWORD:-1234}
+    environment:
+      GOOGLE_ANALYTICS: ""
     depends_on:
       - web-server
     ports:
@@ -106,18 +107,6 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
-  prometheus:
-    build:
-      context: ./
-      dockerfile: ./prometheus/Dockerfile
-    volumes:
-      - services:/data
-    depends_on:
-      - flower
-      - rabbitmq
-    restart: unless-stopped
-    ports:
-      - "9090:9090"
 volumes:
   rabbitmq:
     external: True

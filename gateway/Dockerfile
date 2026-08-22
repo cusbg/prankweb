@@ -2,24 +2,12 @@
 # Build web-application.
 #
 FROM node:24-bullseye AS frontend
-
 WORKDIR /opt/frontend
 
-# copy package.json and package-lock.json to prevent re-running npm ci on every code change
-COPY ./frontend/package.json ./
-COPY ./frontend/package-lock.json ./
-
+COPY ./frontend/package.json ./frontend/package-lock.json ./
 RUN npm ci
 
-#
-# Build the application.
-#
-FROM frontend AS build
-# copy the rest of the source codes and build the application
 COPY ./frontend/ ./
-
-ARG GOOGLE_ANALYTICS
-
 RUN npm run build
 
 #
@@ -37,15 +25,19 @@ WORKDIR /opt/htpasswd
 RUN htpasswd -b -c /opt/htpasswd/.htpasswd ${WEB_SERVICE_USER} ${WEB_SERVICE_PASSWORD}
 
 #
-#
+# Gateway image
 #
 FROM nginx:1.25.2
 
 RUN rm /etc/nginx/conf.d/default.conf
 
-COPY --from=build /opt/frontend/dist /opt/prankweb-frontend
+COPY --from=frontend /opt/frontend/dist /opt/prankweb-frontend
 COPY --from=htpasswd /opt/htpasswd/.htpasswd /etc/apache2/.htpasswd
 
-COPY ./gateway/nginx/gateway.conf /etc/nginx/conf.d/
 COPY ./gateway/nginx/cors.conf /etc/nginx/
 COPY ./gateway/nginx/restricted.conf /etc/nginx/
+
+COPY ./gateway/nginx/conf.d/ /etc/nginx/conf.d/
+COPY ./gateway/docker-entrypoint.d/ /docker-entrypoint.d/
+
+RUN chmod +x /docker-entrypoint.d/20-google-analytics.sh
